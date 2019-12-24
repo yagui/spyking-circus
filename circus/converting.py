@@ -429,7 +429,8 @@ def main(params, nb_cpu, nb_gpu, use_gpu, extension):
 
         if file_format in supported_by_phy:
             if not params.getboolean('data', 'overwrite'):
-                gui_params['dat_path'] = r"%s" % params.get('data', 'data_file_no_overwrite')
+                datafileNoOv = params.get('data', 'data_file_no_overwrite')
+                gui_params['dat_path'] = "'../" + os.path.basename(datafileNoOv) + "'"
             else:
                 if params.get('data', 'stream_mode') == 'multi-files':
                     data_file = params.get_data_file(source=True, has_been_created=False)
@@ -438,7 +439,7 @@ def main(params, nb_cpu, nb_gpu, use_gpu, extension):
                         gui_params['dat_path'] += 'r"%s", ' % f
                     gui_params['dat_path'] += "]"
                 else:
-                    gui_params['dat_path'] = 'r"%s"' % params.get('data', 'data_file')
+                    gui_params['dat_path'] = "'../../" + os.path.basename(data_file.file_name) + "'"
         else:
             gui_params['dat_path'] = 'giverandomname.dat'
         gui_params['n_channels_dat'] = params.nb_channels
@@ -447,8 +448,9 @@ def main(params, nb_cpu, nb_gpu, use_gpu, extension):
         if 'data_offset' in data_file.params.keys():
             gui_params['offset'] = data_file.data_offset
         gui_params['sample_rate'] = params.rate
-        gui_params['dir_path'] = output_path
+        #gui_params['dir_path'] = output_path
         gui_params['hp_filtered'] = True
+        gui_params['radius'] = probe['radius']
 
         f = open(os.path.join(output_path, 'params.py'), 'w')
         for key, value in gui_params.items():

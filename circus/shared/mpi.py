@@ -109,6 +109,11 @@ def gather_mpi_arguments(hostfile, params):
                            'Consider downgrading or switching to MPICH'], 'error', logger)
             sys.exit(0)
         mpi_args = ['mpirun', '--mca', 'mpi_warn_on_fork', '0']
+        mpi_args += ['--mca', 'pml', 'ob1']
+        mpi_args += ['--mca', 'btl', 'openib,self,vader']
+        mpi_args += ['--mca', 'btl_openib_cpc_include', 'rdmacm']
+        mpi_args += ['--mca', 'btl_openib_rroce_enable', '1']
+        mpi_args += ['--mca', 'btl_openib_receive_queues', 'P,128,64,32,32,32:S,2048,1024,128,32:S,12288,1024,128,32:S,65536,1024,128,32']
         if os.getenv('LD_LIBRARY_PATH'):
             mpi_args += ['-x', 'LD_LIBRARY_PATH']
         if os.getenv('PATH'):

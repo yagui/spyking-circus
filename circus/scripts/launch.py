@@ -148,6 +148,17 @@ but a subset x,y can be done. Steps are:
             print_info(['Keep in mind that filtering is performed on site, so please',
                         'be sure to keep a copy of your data elsewhere'])
             shutil.copyfile(config_file, file_params)
+            import fileinput
+            version_added = False
+            for line in fileinput.input(file_params,inplace=True):
+              print(line.strip())
+              if not version_added:
+                if line[0] is not '#':
+                  print('[version]')
+                  print('version        = {:<10} # Spyking Circus version used when generated params file'.format(circus.__version__))
+                  print('')
+                  version_added = True
+
         sys.exit(0)
     elif batch:
         tasks_list = filename
